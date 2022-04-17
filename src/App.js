@@ -1,24 +1,56 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { Header } from './components/header/Header';
+import { Ingresos } from './components/ingresos/Ingresos';
+import { IngresosItem } from './components/ingresos/IngresosItem';
+import { Deuda } from './components/deuda/Deuda';
+import { DeudaItem } from './components/deuda/DeudaItem';
+import { Hormiga } from './components/hormiga/Hormiga';
+import { HormigaItem } from './components/hormiga/HormilaItem';
+import { Balance } from './components/balance/Balance';
+import { Footer } from './components/footer/Footer';
+import { Welcome } from './components/welcome/Welcome';
+
+const  ingresosArray = [
+  {nombre: 'gas', monto:300},
+  {nombre: 'luz', monto:300},
+  {nombre: 'renta', monto:300},
+  {nombre: 'comida', monto:300},
+  {nombre: 'agua', monto:300},
+  {nombre: 'colegiatura', monto:300},
+  {nombre: 'netflix', monto:300},
+]
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <>
+  <Header/>
+  
+  <Welcome/>
+
+  <Ingresos>
+    {ingresosArray.map((Deudas)=> (
+      <IngresosItem/>
+    ))}
+  </Ingresos>
+
+  <Deuda>
+  {ingresosArray.map((Deudas)=> (
+      <DeudaItem/>
+    ))}
+  </Deuda>
+
+  <Hormiga>
+  {ingresosArray.map((Deudas)=> (
+      <HormigaItem/>
+    ))}
+  </Hormiga>
+
+  <Balance/>
+  <Footer/>
+
+  </>
   );
 }
 

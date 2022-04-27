@@ -2,11 +2,11 @@ import React from "react";
 import {SvgComponent} from '../../assets/SvgComponent';
 
 const Welcome = () => {
- 
+
   return (
     <>
-    <div className="w-full bg-slate-500 h-96 flex justify-center items-center space-x-80">
-      <div className="" >
+    <div className="w-full bg-slate-500 h-96 grid grid-cols-2 justify-items-center ">
+      <div className="mt-5" >
         <p className="text-left font-serif text-2xl italic tracking-wide leading-9  text-white"> bienvenido a <strong>finanzas app </strong> <br/>
         El proposito de esta APP es el de ayudar <br/>
         a las personas a administrar sus finanzas de una manera <br/>

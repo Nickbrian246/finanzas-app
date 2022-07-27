@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+/*Components*************************************** */
 import { Ingresos } from "./ingresos/Ingresos";
 import { Deuda } from "./deuda/Deuda";
 import { DeudaItem } from "./deuda/DeudaItem";
@@ -7,6 +8,8 @@ import { HormigaItem } from "./hormiga/HormilaItem";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { EditIngresoModal } from "../../modals/editIngresoModal";
 import { EditDeuda } from "../../modals/components/EditDeuda";
+
+/***************************************************** */
 
 
 const BigDaddy = () => {

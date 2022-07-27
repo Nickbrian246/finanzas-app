@@ -12,7 +12,12 @@ const EditIngresoModal = ({children}) => {
     drop-shadow-lg
     content-center
     justify-items-center
-    ">
+    z-10
+    "
+    style={{
+    marginTop:'-350px',
+    marginLeft:'100px'}}
+    >
       {children}
     </div>,
     document.getElementById('modal')

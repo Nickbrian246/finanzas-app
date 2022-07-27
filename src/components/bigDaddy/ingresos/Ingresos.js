@@ -3,16 +3,21 @@ import { BsXCircle } from "react-icons/bs";
 import { BiPencil } from "react-icons/bi";
 import Swal from 'sweetalert2';
 
+
 const Ingresos = ({
   ingresoArrayfromState,
   setIngresoArrayfromState,
+  modal,
+  setModal,
+  editItemPosition,
+  setItemPosition,
 }) => {
 
 const [ingreso, setIngreso] = useState('');
 const [monto, setMonto] = useState('');
 const refMonto = useRef(null);
 const refIngreso = useRef(null);
-console.log(refMonto);
+
 
 const handleInputIngreso = (event) =>{
   setIngreso(event.target.value);
@@ -71,6 +76,12 @@ const deleteItems = (a)=> {
   console.log('soy index', findIndex)
 
 }
+const handleEditButton = (a) => {
+  const findIndex = ingresoArrayfromState.findIndex(e =>e.nombre === a);
+  setModal(true)
+  setItemPosition(findIndex)
+  
+};
 
 
 
@@ -140,7 +151,9 @@ const deleteItems = (a)=> {
                 />
               </span>
               <span>
-                <BiPencil style={{color:'green'}}/>
+                <BiPencil
+                onClick={()=> {handleEditButton(a.nombre)}} 
+                style={{color:'green'}}/>
               </span>
               </div>
             </div>

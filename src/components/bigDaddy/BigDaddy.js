@@ -8,53 +8,109 @@ import { HormigaItem } from "./hormiga/HormilaItem";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { EditIngresoModal } from "../../modals/editIngresoModal";
 import { EditDeuda } from "../../modals/components/EditDeuda";
-
 /***************************************************** */
+import Swal from 'sweetalert2';
+import Slider from "./modal/consejosModal";
 
 
-const BigDaddy = () => {
+const FinancialRecord = (props) => {
+  const {setArrayMonthly,setArrayYearly,setOpenGraphics,setBalance} = props
   const [modal, setModal]= useState(false);
   const [editItemPosition, setItemPosition  ]= useState('');
-  const ingresosArray = [];
+  const [Iserror, setIsError] = useState(false);
 
 const [ingresoArrayfromState, setIngresoArrayfromState] = useLocalStorage('INGRESOS_V1',[]);
+const [ingresoArrayDeudas, setIngresoArrayDeudas] = useLocalStorage('DEUDAS_V1',[]);
+const [IngresoArrayHormiga, setIngresoArrayHormiga] = useLocalStorage('HORMIGA_V1',[]);
+
+console.log(ingresoArrayfromState,"ingreso");
+console.log(ingresoArrayDeudas,"deudas");
+console.log(IngresoArrayHormiga,"hormiga");
+
+const handleBtn = () => {
+    if(ingresoArrayfromState.length === 0  ||  ingresoArrayDeudas.length === 0   || IngresoArrayHormiga.length === 0 ){
+      return  Swal.fire({
+        icon: 'error',
+        title: 'Aún tienes campos que llenar.',
+      }) 
+    }
+    /**Semanal */
+    const totalIncome = ingresoArrayfromState.reduce((previusValue, currentValue) =>{
+      return previusValue + parseFloat(currentValue.monto)
+    },0)
+
+    const expensesdebt = ingresoArrayDeudas.reduce ((previusValue, currentValue) => {
+      return  previusValue + parseFloat(currentValue.monto)
+    },0) 
+    
+    const expensesAnt = IngresoArrayHormiga.reduce((previusValue, currentValue) =>{
+      return previusValue + parseFloat(currentValue.monto)
+    },0)
+    const generateMonthly = [...ingresoArrayDeudas,...IngresoArrayHormiga,{totalIncome}]
+    const balance = totalIncome - (expensesdebt + expensesAnt)
+
+
+    /**Year */
+
+    const yearTotalIncome = (totalIncome * 12);
+    
+    const yearExpensesDebt = ingresoArrayDeudas.map((item) => {
+      return {...item,monto: parseFloat(item.monto ) * 12}
+    })
+
+    const yearExpensesAnt = IngresoArrayHormiga.map((item) => {
+      return {...item,monto:parseFloat(item.monto) * 12 }
+    })
+    const generateYear = [...yearExpensesAnt, ...yearExpensesDebt , {totalIncome}]
+    setBalance(balance)
+    setArrayMonthly(generateMonthly)
+    setArrayYearly(generateYear)
+    setOpenGraphics((preState) => !preState)
+}
+
   return (
     <>
-    <div className="w-full grid grid-cols-3 gap-5 relative">
-    <Ingresos
-    modal={modal}
-    setModal={setModal}
-    ingresoArrayfromState={ingresoArrayfromState}
-    setIngresoArrayfromState={setIngresoArrayfromState}
-    editItemPosition={editItemPosition}
-    setItemPosition={setItemPosition}
-    />
-    {modal === true && (  <EditIngresoModal>
-  <EditDeuda 
-  modal={modal}
-  setModal={setModal}
-  ingresoArrayfromState={ingresoArrayfromState}
-  setIngresoArrayfromState={setIngresoArrayfromState}
-  editItemPosition={editItemPosition}
-  setItemPosition={setItemPosition}
-  />
-</EditIngresoModal>)}
+    <section className="w-full flex justify-center my-28  flex-wrap gap-4">{/**Container */}
+    <div className="w-3/4 flex justify-end p-4">
+      <button
+      onClick={() => {handleBtn()}}
+      className="
+      p-1 
+      bg-orange-500 
+      rounded-lg 
+      text-2xl
+    text-white"
 
-  <Deuda>
-  {ingresosArray.map((Deudas)=> (
-      <DeudaItem/>
-    ))}
-  </Deuda>
-
-  <Hormiga>
-  {ingresosArray.map((Deudas)=> (
-      <HormigaItem/>
-    ))}
-  </Hormiga>
-      
+      >
+        Generar Balance
+      </button>
     </div>
+    <div className=" w-full flex justify-center gap-2 relative  p-2 flex-wrap " >
+      <Ingresos
+      ingresoArrayfromState={ingresoArrayfromState}
+      setIngresoArrayfromState={setIngresoArrayfromState}
+      editItemPosition={editItemPosition}
+      setItemPosition={setItemPosition}
+      />
+
+    <Deuda 
+        ingresoArrayfromState={ingresoArrayDeudas}
+        setIngresoArrayfromState={setIngresoArrayDeudas}
+        editItemPosition={editItemPosition}
+        setItemPosition={setItemPosition}
+      />
+
+    <Hormiga
+          ingresoArrayfromState={IngresoArrayHormiga}
+          setIngresoArrayfromState={setIngresoArrayHormiga}
+          editItemPosition={editItemPosition}
+          setItemPosition={setItemPosition}
+    />
+      </div>
+     
+    </section>
     </>
   )
 }
 
-export {BigDaddy};
+export {FinancialRecord};

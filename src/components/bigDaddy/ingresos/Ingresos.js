@@ -1,20 +1,22 @@
 import React, { useRef, useState } from "react";
 import { BsXCircle } from "react-icons/bs";
+import {BsFillTrashFill} from "react-icons/bs"
 import { BiPencil } from "react-icons/bi";
 import Swal from 'sweetalert2';
+import { EditDeuda } from "../../../modals/components/EditDeuda";
+import { EditIngresoModal } from "../../../modals/editIngresoModal";
 
 
 const Ingresos = ({
   ingresoArrayfromState,
   setIngresoArrayfromState,
-  modal,
-  setModal,
   editItemPosition,
   setItemPosition,
 }) => {
 
 const [ingreso, setIngreso] = useState('');
 const [monto, setMonto] = useState('');
+const [modal, setModal]= useState(false);
 const refMonto = useRef(null);
 const refIngreso = useRef(null);
 
@@ -83,40 +85,37 @@ const handleEditButton = (a) => {
   
 };
 
-
-
-
-
-
   return (
     <>
-    <div className="w-9/12 h-96 bg-gray-300  ml-10 rounded-md overflow-auto">
-      <h1 className="font-bold ml-52 mb-4  text-lg">Ingresos</h1>
-
-      <div className="flex  ">
-
-
-        <input
-        value={ingreso}
-        onChange={handleInputIngreso}
-        type={'text'}
-        placeholder="Ingresos"
-        className="ml-1 rounded-md"
-        ref={refIngreso}
-        onKeyUp={keyEvent}
-        />
-        
-        <input
-        value={monto}
-        onChange={handleInputMonto}
-        placeholder="$$$ Monto"
-        className="ml-2 rounded-md"
-        onKeyUp={keyEvent}
-        ref={refMonto}
-        type={'number'}
-        />
+    <div className="max-w-xl h-96 bg-gray-300 p-2  rounded-md overflow-auto relative "> {/**card container */} 
+      <div className="flex mb-1">{/**titulo */}
+        <h1 className="font-bold  m-auto text-lg">Ingresos</h1>
+      </div>
+      <div className="flex w-full justify-between gap-2  ">
+          <div className="flex flex-wrap w-full gap-2 ">
+              <input
+              value={ingreso}
+              onChange={handleInputIngreso}
+              type={'text'}
+              placeholder="Ingresos"
+              className=" rounded-md flex-1"
+              ref={refIngreso}
+              onKeyUp={keyEvent}
+            />
+            
+            <input
+            value={monto}
+            onChange={handleInputMonto}
+            placeholder="$$$ Monto"
+            className="rounded-md flex-1"
+            onKeyUp={keyEvent}
+            ref={refMonto}
+            type={'number'}
+            />
+          </div>
 
         <button
+        title="boton de guardado"
         onClick={()=>{handleClickButon()}}
         className="ml-2
         bg-yellow-500
@@ -131,26 +130,27 @@ const handleEditButton = (a) => {
         </button>
 
 
-      </div>
-      <div>
+      </div>{/**inputs y boton  */}
+      <div className="flex flex-col items-start  ">{/**List */}
           {ingresoArrayfromState.map((a) => 
           {return <div
             key={a.nombre}
             style={{borderBottom:'1px solid blue'}}
-            className="flex   items-center justify-between ml-8 mt-2 w-10/12"
+            className="flex  items-center justify-between mt-2 w-10/12"
             >
 
             <p className="w-36 truncate">{a.nombre}</p>
             <p className="w-36">{'$ '+a.monto}</p>
 
             <div className="flex space-x-5 ">
-              <span>
-                <BsXCircle
+              <span className="hover:scale-[1.3]">
+                <BsFillTrashFill
                 onClick={()=>{deleteItems(a.nombre)}}
                 style={{color:'red'}}
                 />
               </span>
-              <span>
+              <span 
+              className="hover:scale-[1.3]">
                 <BiPencil
                 onClick={()=> {handleEditButton(a.nombre)}} 
                 style={{color:'green'}}/>
@@ -159,6 +159,29 @@ const handleEditButton = (a) => {
             </div>
             }
           )}
+  {modal === true && ( 
+  <div 
+  className="absolute top-1/4 left-1/4">
+    <EditIngresoModal
+      modal={modal}
+      setModal={setModal}
+      ingresoArrayfromState={ingresoArrayfromState}
+      setIngresoArrayfromState={setIngresoArrayfromState}
+      editItemPosition={editItemPosition}
+      setItemPosition={setItemPosition}
+    >
+      <EditDeuda 
+        modal={modal}
+        setModal={setModal}
+        ingresoArrayfromState={ingresoArrayfromState}
+        setIngresoArrayfromState={setIngresoArrayfromState}
+        editItemPosition={editItemPosition}
+        setItemPosition={setItemPosition}
+      />
+    </EditIngresoModal>
+  </div>
+)}
+
       </div>
       
     </div>

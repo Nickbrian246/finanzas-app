@@ -1,26 +1,26 @@
 import React from "react";
 import {SvgComponent} from '../../assets/SvgComponent';
+import "./welcome.css"
 
 const Welcome = () => {
 
   return (
     <>
-    <div className="w-full bg-slate-500 h-96 grid grid-cols-2 justify-items-center ">
-      <div className="mt-5" >
-        <p className="text-left font-serif text-2xl italic tracking-wide leading-9  text-white"> bienvenido a <strong>finanzas app </strong> <br/>
-        El proposito de esta APP es el de ayudar <br/>
-        a las personas a administrar sus finanzas de una manera <br/>
+    <article className="w-full bg-slate-500 h-96 flex justify-around items-center p-1 ">
+      <div className="flex-1 flex justify-center items-center w-fit h-full " >
+        <p className=" text-left inline-block font-serif xl:text-2xl italic  text-xl xl:tracking-wide 2xl:leading-9  text-white"> bienvenido a <strong>finanzas app </strong> <br/>
+        El propósito de esta APP es ayudar a las personas a administrar sus finanzas de una manera<br/>
         que les permita generar ahorros y maximizar sus recursos.<br/>
-        En esta App podras realizar tu balance mensual de tus gastos <br/>
-        y con ello saber el estado de tus finanzas, hacer los ajustes <br/>
-        necesarios para tener finanzas saludables.  </p>
-      </div>
-      <div className="mr-15">
-        <SvgComponent width={700} height={400}/>
-      </div>
+        En esta App podrás realizar tu balance mensual de gastos<br/>
+        y con ello saber el estado de tus finanzas, hacer los ajustes<br/>
+        necesarios para tener finanzas saludables.
 
-
-    </div>
+        </p>
+      </div>
+      <div   className="svgContainer">
+        <SvgComponent  width="100%" height="100%" />
+      </div>
+    </article>
     </>
   )
 }

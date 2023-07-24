@@ -1,11 +1,8 @@
-import React, {useState}from "react";
-
-
+import {useState}from "react";
 
 const useLocalStorage =(ingesoName,initialValue )=>  {
 
-
-let parseIngresosItem;
+  let parseIngresosItem;
 const localStorageName = localStorage.getItem(ingesoName);
 
 if(!localStorageName) { //si no hay nada en localStorage
@@ -30,7 +27,6 @@ const saveDeudadLocalStorage = (saveDeuda) => {
 return [
   ingresoArrayfromState,
   saveDeudadLocalStorage,
-
 ]
 
 }

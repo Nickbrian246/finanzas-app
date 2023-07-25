@@ -16,11 +16,15 @@ const Balance = (props) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isBalanceNegative, setIsBalanceNegative] = useState(false)
   const {balance,ArrayMonthly,ArrayYearly} = props
+  
   const totalIncomeMonthly = ArrayMonthly[ArrayMonthly.length  - 1]
   const {totalIncome} = totalIncomeMonthly;
   const totalIncomeYearly = (totalIncome * 12) 
   const TotalGastosAnuales = ArrayYearly.filter((item) => item.monto).reduce((prevValue, currentValue) => prevValue + parseFloat(currentValue.monto),0)
-  const yearlyBalance = (totalIncomeYearly - parseFloat(TotalGastosAnuales))
+  const totalGastosAnualesHormiga = ArrayYearly.filter((item) => item.porDia).reduce((preValue, currentValue) => preValue + parseFloat(currentValue.porDia),0)
+  const yearlyBalance = totalIncomeYearly - (parseFloat(TotalGastosAnuales) + parseFloat(totalGastosAnualesHormiga))
+  let monthlyBalanceCurrency = balance.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
+  let yearlyBalanceCurrency = yearlyBalance.toLocaleString("es-MX",{style:"currency", currency:"MXN"})
 
 const addLineBreaks = (text)=> {
   return text.split('<br/>').map((paragraph, index) => (
@@ -65,40 +69,47 @@ useEffect(()=>{
 )}
           </div>
         </article>
-        <div className="flex flex-wrap  gap-2">
-          <div className=" flex-1 flex justify-center items-center "> {/**grafica de mes  */} 
-          <div className="border-2 min-w-[260px] min-h-[400px] border-orange-600 w-4/5 h-[90%] p-2">
-            <div className="w-full flex flex-col justify-center items-center ">
-                <h2 className="inline-block text-2xl">Mensual</h2>
-                <div className="flex gap-6">
-                  <p>Balance:<span className={`${balance < 0 ? "text-red-600" : "text-cyan-400"}`}>{balance}</span></p>
-                  <p>Ingresos Totales <span>{totalIncome.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</span></p>
+
+        <div className="flex flex-wrap  gap-2">{/**contenedor graficas  */}
+          <div className=" flex-1 flex justify-center items-center  h-fit "> {/**grafica de mes  */}
+
+            <div className="border-2 min-w-[260px] min-h-[400px] border-orange-600 w-4/5 h-[90%]  p-2">
+              <div className="w-full flex flex-col justify-center items-center ">
+                  <h2 className="inline-block text-2xl">Mensual</h2>
+                  <div className="flex gap-6">
+                    <p>Balance:<span className={`${balance < 0 ? "text-red-600" : "text-lime-500"}`}>
+                      {isBalanceNegative  ? `- ${monthlyBalanceCurrency}`:`+${monthlyBalanceCurrency}`}
+                      </span></p>
+                    <p>Ingresos Totales <span>{totalIncome.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</span></p>
+                  </div>
                 </div>
-              </div>
-                <div className="w-full h-4/5">
-                  <GraphicMonthly
-                  balance ={balance}
-                  ArrayMonthly = {ArrayMonthly}
-                  />
-                </div>
-          </div>
-          </div>
-          <div className=" flex-1 flex justify-center items-center  "> {/**grafica de año  */} 
-            <div className="border-2 min-w-[260px] min-h-[400px] border-orange-600 w-4/5 h-[90%] p-2">
-            <div className="w-full flex flex-col justify-center items-center">
-                <h2 className="inline-block text-2xl">Anual</h2>
-                <div className="flex gap-6">
-                  <p>Balance:<span className={`${yearlyBalance < 0 ? "text-red-600" : "text-cyan-400"}`}>{yearlyBalance}</span></p>
-                  <p>Ingresos Totales <span>{totalIncomeYearly.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</span></p>
-                </div>
-              </div>
-                <div className="w-full h-3/4">
-                  <GraphicYearly
-                  balance ={balance}
-                  ArrayYearly = {ArrayYearly}
-                  />
-                </div>
+                  <div className="w-full min-h-[300px]  h-4/5">
+                    <GraphicMonthly
+                    balance ={balance}
+                    ArrayMonthly = {ArrayMonthly}
+                    />
+                  </div>
             </div>
+
+          </div>
+          <div className=" flex-1 flex justify-center items-center  h-fit "> {/**grafica de año  */} 
+              <div className="border-2 min-w-[260px] min-h-[400px] border-orange-600 w-4/5 h-[90%] p-2">
+              <div className="w-full flex flex-col justify-center items-center">
+                  <h2 className="inline-block text-2xl">Anual</h2>
+                  <div className="flex gap-6">
+                    <p>Balance:<span className={`${yearlyBalance < 0 ? "text-red-600" : "text-green-900"}`}>
+                    {isBalanceNegative  ? `- ${yearlyBalanceCurrency}`:`+${yearlyBalanceCurrency}`}
+                      </span></p>
+                    <p>Ingresos Totales <span>{totalIncomeYearly.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</span></p>
+                  </div>
+              </div>
+                  <div className="w-full min-h-[300px]  h-4/5">
+                    <GraphicYearly
+                    balance ={balance}
+                    ArrayYearly = {ArrayYearly}
+                    />
+                  </div>
+              </div>
           </div>
         </div>
         <Slider/>

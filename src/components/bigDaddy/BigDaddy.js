@@ -2,16 +2,10 @@ import React, { useState } from "react";
 /*Components*************************************** */
 import { Ingresos } from "./ingresos/Ingresos";
 import { Deuda } from "./deuda/Deuda";
-import { DeudaItem } from "./deuda/DeudaItem";
 import { Hormiga } from "./hormiga/Hormiga";
-import { HormigaItem } from "./hormiga/HormilaItem";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { EditIngresoModal } from "../../modals/editIngresoModal";
-import { EditDeuda } from "../../modals/components/EditDeuda";
 /***************************************************** */
 import Swal from 'sweetalert2';
-import Slider from "./modal/consejosModal";
-
 
 const FinancialRecord = (props) => {
   const {setArrayMonthly,setArrayYearly,setOpenGraphics,setBalance} = props
@@ -22,10 +16,6 @@ const FinancialRecord = (props) => {
 const [ingresoArrayfromState, setIngresoArrayfromState] = useLocalStorage('INGRESOS_V1',[]);
 const [ingresoArrayDeudas, setIngresoArrayDeudas] = useLocalStorage('DEUDAS_V1',[]);
 const [IngresoArrayHormiga, setIngresoArrayHormiga] = useLocalStorage('HORMIGA_V1',[]);
-
-console.log(ingresoArrayfromState,"ingreso");
-console.log(ingresoArrayDeudas,"deudas");
-console.log(IngresoArrayHormiga,"hormiga");
 
 const handleBtn = () => {
     if(ingresoArrayfromState.length === 0  ||  ingresoArrayDeudas.length === 0   || IngresoArrayHormiga.length === 0 ){
@@ -44,12 +34,10 @@ const handleBtn = () => {
     },0) 
     
     const expensesAnt = IngresoArrayHormiga.reduce((previusValue, currentValue) =>{
-      return previusValue + parseFloat(currentValue.monto)
+      return previusValue + parseFloat(currentValue.porDia)
     },0)
     const generateMonthly = [...ingresoArrayDeudas,...IngresoArrayHormiga,{totalIncome}]
     const balance = totalIncome - (expensesdebt + expensesAnt)
-
-
     /**Year */
 
     const yearTotalIncome = (totalIncome * 12);
@@ -59,7 +47,11 @@ const handleBtn = () => {
     })
 
     const yearExpensesAnt = IngresoArrayHormiga.map((item) => {
-      return {...item,monto:parseFloat(item.monto) * 12 }
+      return {
+        ...item,
+        monto:parseFloat(item.monto) * 12,
+        porDia: parseFloat(item.porDia) *12
+        }
     })
     const generateYear = [...yearExpensesAnt, ...yearExpensesDebt , {totalIncome}]
     setBalance(balance)
@@ -106,8 +98,7 @@ const handleBtn = () => {
           editItemPosition={editItemPosition}
           setItemPosition={setItemPosition}
     />
-      </div>
-     
+    </div>
     </section>
     </>
   )

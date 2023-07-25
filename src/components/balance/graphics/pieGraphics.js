@@ -10,16 +10,16 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 export default  function GraphicMonthly(props){
   const { balance,ArrayMonthly} = props
   let options = {responsive:true, maintainAspectRatio:false}
-  const lables = ArrayMonthly.filter((item) => { if(item.nombre) return item.nombre}).map((item) => item.nombre)
-  const dataYearly = ArrayMonthly.filter((item) =>{  if(item.monto ) return item.monto }).map((item) => item.monto)
+  const labels = ArrayMonthly.filter((item) => !!item.nombre).map((item) => item.nombre);
+  const dataMonthly = ArrayMonthly.filter((item) => item.monto).map((item) => {if (item.porDia) {return item.porDia}  return item.monto})
   
 
 let data = {
-  labels: lables,
+  labels: labels,
   datasets:[
     {
       label:"Grafica Mensual",
-      data:dataYearly,
+      data:dataMonthly,
       backgroundColor:[
         "#BFF5BA",
         "#FF0000",

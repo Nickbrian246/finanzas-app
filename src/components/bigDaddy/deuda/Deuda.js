@@ -1,10 +1,9 @@
 import React, { useRef, useState } from "react";
-import { BsXCircle } from "react-icons/bs";
-import {BsFillTrashFill} from "react-icons/bs"
-import { BiPencil } from "react-icons/bi";
+
 import Swal from 'sweetalert2';
 import { EditDeuda } from "../../../modals/components/EditDeuda";
 import { EditIngresoModal } from "../../../modals/editIngresoModal";
+import { CardItem } from "../../card/cardItem";
 
 const Deuda = ({
   ingresoArrayfromState,
@@ -97,7 +96,7 @@ const handleEditButton = (a) => {
               onChange={handleInputIngreso}
               type={'text'}
               placeholder="Ingresos"
-              className=" rounded-md flex-1"
+              className=" rounded-md flex-1 p-1"
               ref={refIngreso}
               onKeyUp={keyEvent}
             />
@@ -106,7 +105,7 @@ const handleEditButton = (a) => {
             value={monto}
             onChange={handleInputMonto}
             placeholder="$$$ Monto"
-            className="rounded-md flex-1"
+            className="rounded-md flex-1 p-1"
             onKeyUp={keyEvent}
             ref={refMonto}
             type={'number'}
@@ -132,31 +131,16 @@ const handleEditButton = (a) => {
       </div>{/**inputs y boton  */}
       <div className="flex flex-col items-start  ">{/**List */}
           {ingresoArrayfromState.map((a) => 
-          {return <div
-            key={a.nombre}
-            style={{borderBottom:'1px solid blue'}}
-            className="flex  items-center justify-between mt-2 w-10/12"
-            >
-
-            <p className="w-36 truncate">{a.nombre}</p>
-            <p className="w-36">{'$ '+a.monto}</p>
-
-            <div className="flex space-x-5 ">
-              <span className="hover:scale-[1.3]">
-                <BsFillTrashFill
-                onClick={()=>{deleteItems(a.nombre)}}
-                style={{color:'red'}}
-                />
-              </span>
-              <span 
-              className="hover:scale-[1.3]">
-                <BiPencil
-                onClick={()=> {handleEditButton(a.nombre)}} 
-                style={{color:'green'}}/>
-              </span>
-              </div>
-            </div>
-            }
+            (
+              <CardItem
+              key = {a.nombre}
+              nombre = {a.nombre}
+              monto = {a.monto}
+              id = {a.id}
+              deleteItems = {deleteItems}
+              handleEditButton = {handleEditButton}
+              />
+            )
           )}
   {modal === true && ( 
   <div 

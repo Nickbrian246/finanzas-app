@@ -5,6 +5,7 @@ import { BiPencil } from "react-icons/bi";
 import Swal from 'sweetalert2';
 import { EditDeuda } from "../../../modals/components/EditDeuda";
 import { EditIngresoModal } from "../../../modals/editIngresoModal";
+import { CardItem } from "../../card/cardItem";
 
 const Hormiga = ({
   ingresoArrayfromState,
@@ -15,9 +16,11 @@ const Hormiga = ({
 
 const [ingreso, setIngreso] = useState('');
 const [monto, setMonto] = useState('');
+const [diasDeSemana, setDiasDeSemana] = useState('');
 const [modal, setModal]= useState(false);
 const refMonto = useRef(null);
 const refIngreso = useRef(null);
+const refDiasDelMes = useRef(null);
 
 
 const handleInputIngreso = (event) =>{
@@ -25,6 +28,9 @@ const handleInputIngreso = (event) =>{
 }
 const handleInputMonto = (event) =>{
   setMonto(event.target.value);
+}
+const handleInputDiasDeSemana = (event) =>{
+  setDiasDeSemana(event.target.value);
 }
 
 const keyEvent = (e) => {
@@ -34,11 +40,14 @@ const keyEvent = (e) => {
       title: 'opps, para que hace falta un campo',
     })
   }
-  if(e.key==='Enter' && ingreso !== ''){
+  if(e.key ==='Enter' && ingreso !== ''){
     refMonto.current.focus();
   }
+  if(e.key ==='Enter' && monto !== ''){
+    refDiasDelMes.current.focus();
+  }
 
-  if((e.key==='Enter' && monto !=='') && ingreso !==''){
+  if((e.key==='Enter' && monto !=='') && ingreso !=='' && diasDeSemana !== ""){
     
     handleClickButon()
   }
@@ -55,15 +64,19 @@ const handleClickButon = () => {
   if( monto !=='' && ingreso !==''){
     
     const newArray = [...ingresoArrayfromState];
+    let mensual = parseFloat(monto) * parseFloat(diasDeSemana)
   newArray.push({
     nombre:ingreso,
     monto: monto,
+    porDia:mensual,
+    dias:diasDeSemana
   });
   
   setIngresoArrayfromState(newArray);
 
   setIngreso('');
   setMonto('');
+  setDiasDeSemana("")
   refIngreso.current.focus();
   }
 }
@@ -73,8 +86,7 @@ const deleteItems = (a)=> {
   const newArray = [...ingresoArrayfromState];
   newArray.splice(findIndex, 1);
   setIngresoArrayfromState(newArray);
-  console.log(a);
-  console.log('soy index', findIndex)
+
 
 }
 const handleEditButton = (a) => {
@@ -96,8 +108,8 @@ const handleEditButton = (a) => {
               value={ingreso}
               onChange={handleInputIngreso}
               type={'text'}
-              placeholder="Ingresos"
-              className=" rounded-md flex-1"
+              placeholder="Nombre"
+              className=" rounded-md flex-1  p-1"
               ref={refIngreso}
               onKeyUp={keyEvent}
             />
@@ -106,9 +118,18 @@ const handleEditButton = (a) => {
             value={monto}
             onChange={handleInputMonto}
             placeholder="$$$ Monto"
-            className="rounded-md flex-1"
+            className="rounded-md flex-1  p-1"
             onKeyUp={keyEvent}
             ref={refMonto}
+            type={'number'}
+            />
+            <input
+            value={diasDeSemana}
+            onChange={handleInputDiasDeSemana}
+            placeholder=" Dias al Mes"
+            className="rounded-md flex-1 p-1"
+            onKeyUp={keyEvent}
+            ref={refDiasDelMes}
             type={'number'}
             />
           </div>
@@ -131,32 +152,17 @@ const handleEditButton = (a) => {
 
       </div>{/**inputs y boton  */}
       <div className="flex flex-col items-start  ">{/**List */}
-          {ingresoArrayfromState.map((a) => 
-          {return <div
-            key={a.nombre}
-            style={{borderBottom:'1px solid blue'}}
-            className="flex  items-center justify-between mt-2 w-10/12"
-            >
-
-            <p className="w-36 truncate">{a.nombre}</p>
-            <p className="w-36">{'$ '+a.monto}</p>
-
-            <div className="flex space-x-5 ">
-              <span className="hover:scale-[1.3]">
-                <BsFillTrashFill
-                onClick={()=>{deleteItems(a.nombre)}}
-                style={{color:'red'}}
-                />
-              </span>
-              <span 
-              className="hover:scale-[1.3]">
-                <BiPencil
-                onClick={()=> {handleEditButton(a.nombre)}} 
-                style={{color:'green'}}/>
-              </span>
-              </div>
-            </div>
-            }
+          {ingresoArrayfromState.map((a) => (
+            <CardItem 
+            key = {a.nombre}
+            nombre = {a.nombre}
+            monto = {a.monto}
+            id = {a.nombre}
+            deleteItems = {deleteItems}
+            handleEditButton = {handleEditButton}
+            porDia = {a.porDia}
+            />
+          )
           )}
   {modal === true && ( 
   <div 

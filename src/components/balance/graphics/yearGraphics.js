@@ -8,8 +8,8 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 export default  function GraphicYearly(props){
   const { balance,ArrayYearly} = props
   let options = {responsive:true, maintainAspectRatio:false}
-  const lables = ArrayYearly.filter((item) => { if(item.nombre) return item.nombre}).map((item) => item.nombre)
-  const dataYearly = ArrayYearly.filter((item) =>{  if(item.monto ) return item.monto }).map((item) => item.monto)
+  const lables = ArrayYearly.filter((item) => item.nombre).map((item) => item.nombre);
+  const dataYearly = ArrayYearly.filter((item) => item.monto).map((item) => {if (item.porDia) {return item.porDia}  return item.monto})
   
 
 let data = {

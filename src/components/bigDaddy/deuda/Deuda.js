@@ -72,9 +72,6 @@ const deleteItems = (a)=> {
   const newArray = [...ingresoArrayfromState];
   newArray.splice(findIndex, 1);
   setIngresoArrayfromState(newArray);
-  console.log(a);
-  console.log('soy index', findIndex)
-
 }
 const handleEditButton = (a) => {
   const findIndex = ingresoArrayfromState.findIndex(e =>e.nombre === a);
